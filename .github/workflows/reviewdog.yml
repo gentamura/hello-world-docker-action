@@ -9,5 +9,6 @@ jobs:
       - name: eslint
         uses: reviewdog/action-eslint@v1
         with:
+          level: warning
           reporter: github-pr-review # Change reporter.
           eslint_flags: 'src/'

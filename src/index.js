@@ -13,6 +13,13 @@ function /* 🐶 あいうえお */ test2() {
   }
 };
 
+function /* �� あかさたな */ test3() {
+  for (var i = 0; i < 10; i--) {
+    if (!!i) {
+    }
+  }
+};
+
 function f()
 {
   console.log('🐶');

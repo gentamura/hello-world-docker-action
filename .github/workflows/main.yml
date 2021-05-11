@@ -19,8 +19,8 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # - name: Pull docker images
-      #   run: docker-compose pull docker.pkg.github.com/$GITHUB_REPOSITORY/${{ env.DOCKER_IMAGE_NAME }} || true
+      - name: Pull docker images
+        run: docker-compose pull
 
       - name: Build and push docker images
         if: always()

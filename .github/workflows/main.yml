@@ -3,17 +3,47 @@ on: [push]
 jobs:
   hello_world_job:
     runs-on: ubuntu-latest
+    # env:
+    #   DOCKER_IMAGE_NAME: hello
     name: A job to say hello
     steps:
       # このリポジトリのプライベートアクションを使用するには
       # リポジトリをチェックアウトする
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Hello world action step
-        uses: ./ # Uses an action in the root directory
-        id: hello
+
+      - name: Login to GitHub Packages Docker Registry
+        uses: docker/login-action@v1
         with:
-          gentamura: 'Mona the Octocat'
+          registry: docker.pkg.github.com
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pull docker images
+        run: docker-compose pull
+
+      - name: Build and push docker images
+        if: always()
+        run: |
+          docker-compose build
+          docker-compose push
+
+      # - name: Pull docker images
+      #   run: docker pull docker.pkg.github.com/$GITHUB_REPOSITORY/${{ env.DOCKER_IMAGE_NAME }} || true
+
+      # - name: Build and push docker images
+      #   if: always()
+      #   run: |
+      #     docker build . -t ${{ env.DOCKER_IMAGE_NAME }} --cache-from=docker.pkg.github.com/$GITHUB_REPOSITORY/${{ env.DOCKER_IMAGE_NAME }} --build-arg BUILDKIT_INLINE_CACHE=1
+      #     docker tag ${{ env.DOCKER_IMAGE_NAME }} docker.pkg.github.com/$GITHUB_REPOSITORY/${{ env.DOCKER_IMAGE_NAME }}
+      #     docker push docker.pkg.github.com/$GITHUB_REPOSITORY/${{ env.DOCKER_IMAGE_NAME }} || true
+
+      # - name: Hello world action step
+      #   uses: ./
+      #   id: hello
+      #   with:
+      #     gentamura: 'Mona the Octocat'
+
       # 「hello」ステップの出力を使用する
-      - name: Get the output time
-        run: echo "The time was ${{ steps.hello.outputs.time }}"
+      # - name: Get the output time
+      #   run: echo "The time was ${{ steps.hello.outputs.time }}"

@@ -1,0 +1,17 @@
+version: '3.2'
+
+services:
+  alpine:
+    build:
+      context: .
+      dockerfile: docker/alpline/Dockerfile
+      # cache_from: docker.pkg.github.com/gentamura/hello-world-docker-action/hello
+  nginx:
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+      # cache_from: docker.pkg.github.com/gentamura/hello-world-docker-action/hello
+    ports:
+      - "8080:80"
+    volumes:
+      - ./src:/usr/share/nginx/html

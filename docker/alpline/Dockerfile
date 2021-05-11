@@ -1,7 +1,7 @@
 # コードを実行するコンテナイメージ
 FROM alpine:3.10
 
-# docker build に渡す --build-arg BUILDKIT_INLINE_CACHE=1
+# GitHub Actions の docker build 時に渡す --build-arg BUILDKIT_INLINE_CACHE=1
 ARG BUILDKIT_INLINE_CACHE
 ENV BUILDKIT_INLINE_CACHE ${BUILDKIT_INLINE_CACHE:-0}
 

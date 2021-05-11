@@ -19,15 +19,25 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Pull docker images
-        run: docker pull docker.pkg.github.com/$GITHUB_REPOSITORY/${{ env.DOCKER_IMAGE_NAME }} || true
+      - name: pull docker images
+        run: docker-compose pull docker.pkg.github.com/$github_repository/${{ env.docker_image_name }} || true
 
-      - name: Build and push docker images
+      - name: build and push docker images
         if: always()
         run: |
-          docker build . -t ${{ env.DOCKER_IMAGE_NAME }} --cache-from=docker.pkg.github.com/$GITHUB_REPOSITORY/${{ env.DOCKER_IMAGE_NAME }} --build-arg BUILDKIT_INLINE_CACHE=1
-          docker tag ${{ env.DOCKER_IMAGE_NAME }} docker.pkg.github.com/$GITHUB_REPOSITORY/${{ env.DOCKER_IMAGE_NAME }}
-          docker push docker.pkg.github.com/$GITHUB_REPOSITORY/${{ env.DOCKER_IMAGE_NAME }} || true
+          docker-compose build -f docker-compose.yml -t ${{ env.docker_image_name }}
+          docker-compose tag ${{ env.docker_image_name }} docker.pkg.github.com/$github_repository/${{ env.docker_image_name }}
+          docker-compose push docker.pkg.github.com/$github_repository/${{ env.docker_image_name }} || true
+
+      # - name: pull docker images
+      #   run: docker pull docker.pkg.github.com/$github_repository/${{ env.docker_image_name }} || true
+
+      # - name: build and push docker images
+      #   if: always()
+      #   run: |
+      #     docker build . -t ${{ env.docker_image_name }} --cache-from=docker.pkg.github.com/$github_repository/${{ env.docker_image_name }} --build-arg buildkit_inline_cache=1
+      #     docker tag ${{ env.docker_image_name }} docker.pkg.github.com/$github_repository/${{ env.docker_image_name }}
+      #     docker push docker.pkg.github.com/$github_repository/${{ env.docker_image_name }} || true
 
       - name: Hello world action step
         uses: ./ # Uses an action in the root directory

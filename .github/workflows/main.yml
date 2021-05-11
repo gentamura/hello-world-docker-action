@@ -38,12 +38,12 @@ jobs:
       #     docker tag ${{ env.DOCKER_IMAGE_NAME }} docker.pkg.github.com/$GITHUB_REPOSITORY/${{ env.DOCKER_IMAGE_NAME }}
       #     docker push docker.pkg.github.com/$GITHUB_REPOSITORY/${{ env.DOCKER_IMAGE_NAME }} || true
 
-      - name: Hello world action step
-        uses: ./
-        id: hello
-        with:
-          gentamura: 'Mona the Octocat'
+      # - name: Hello world action step
+      #   uses: ./
+      #   id: hello
+      #   with:
+      #     gentamura: 'Mona the Octocat'
 
       # 「hello」ステップの出力を使用する
-      - name: Get the output time
-        run: echo "The time was ${{ steps.hello.outputs.time }}"
+      # - name: Get the output time
+      #   run: echo "The time was ${{ steps.hello.outputs.time }}"

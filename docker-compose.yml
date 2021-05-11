@@ -7,14 +7,14 @@ services:
       dockerfile: docker/alpline/Dockerfile
       cache_from:
         - docker.pkg.github.com/hello-world-docker-action/alpline
-    image: docker.pkg.github.com/hello-world-docker-action/alpline
+    image: docker.pkg.github.com/hello-world-docker-action/alpline:latest
   nginx:
     build:
       context: .
       dockerfile: docker/nginx/Dockerfile
       cache_from:
         - docker.pkg.github.com/hello-world-docker-action/nginx
-    image: docker.pkg.github.com/hello-world-docker-action/nginx
+    image: docker.pkg.github.com/hello-world-docker-action/nginx:latest
     ports:
       - "8080:80"
     volumes:

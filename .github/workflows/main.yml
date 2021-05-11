@@ -26,6 +26,7 @@ jobs:
         if: always()
         run: |
           docker build . -t ${{ env.DOCKER_IMAGE_NAME }}
+          docker tag ${{ env.DOCKER_IMAGE_NAME }} docker.pkg.github.com/$GITHUB_REPOSITORY/${{ env.DOCKER_IMAGE_NAME }}
           docker push docker.pkg.github.com/$GITHUB_REPOSITORY/${{ env.DOCKER_IMAGE_NAME }} || true
 
       # - name: Use GitHub Packages for Docker

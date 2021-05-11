@@ -4,7 +4,7 @@ jobs:
   hello_world_job:
     runs-on: ubuntu-latest
     env:
-      DOCKER_IMAGE_NAME: hi
+      DOCKER_IMAGE_NAME: hello
     name: A job to say hello
     steps:
       # このリポジトリのプライベートアクションを使用するには
@@ -19,7 +19,7 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Pull Docker images
+      - name: Pull docker images
         run: docker pull docker.pkg.github.com/$GITHUB_REPOSITORY/${{ env.DOCKER_IMAGE_NAME }} || true
 
       - name: Build and push docker images
@@ -28,12 +28,6 @@ jobs:
           docker build . -t ${{ env.DOCKER_IMAGE_NAME }} --cache-from=docker.pkg.github.com/$GITHUB_REPOSITORY/${{ env.DOCKER_IMAGE_NAME }}
           docker tag ${{ env.DOCKER_IMAGE_NAME }} docker.pkg.github.com/$GITHUB_REPOSITORY/${{ env.DOCKER_IMAGE_NAME }}
           docker push docker.pkg.github.com/$GITHUB_REPOSITORY/${{ env.DOCKER_IMAGE_NAME }} || true
-
-      # - name: Use GitHub Packages for Docker
-      #   run: |
-      #       docker pull docker.pkg.github.com/$GITHUB_REPOSITORY/build-cache-no-buildkit || true
-      #       docker build . -t thing --cache-from=docker.pkg.github.com/$GITHUB_REPOSITORY/build-cache-no-buildkit
-      #       docker tag thing docker.pkg.github.com/$GITHUB_REPOSITORY/build-cache-no-buildkit && docker push docker.pkg.github.com/$GITHUB_REPOSITORY/build-cache-no-buildkit || true
 
       - name: Hello world action step
         uses: ./ # Uses an action in the root directory

@@ -9,11 +9,20 @@ jobs:
       # リポジトリをチェックアウトする
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Use GitHub Repository for Docker
+        run: |
+          echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin
+          docker pull docker.pkg.github.com/$GITHUB_REPOSITORY/build-cache-no-buildkit || true
+          docker build . -t thing --cache-from=docker.pkg.github.com/$GITHUB_REPOSITORY/build-cache-no-buildkit
+          docker tag thing docker.pkg.github.com/$GITHUB_REPOSITORY/build-cache-no-buildkit && docker push docker.pkg.github.com/$GITHUB_REPOSITORY/build-cache-no-buildkit || true
+
       - name: Hello world action step
         uses: ./ # Uses an action in the root directory
         id: hello
         with:
           gentamura: 'Mona the Octocat'
+
       # 「hello」ステップの出力を使用する
       - name: Get the output time
         run: echo "The time was ${{ steps.hello.outputs.time }}"

@@ -39,7 +39,7 @@ jobs:
       #     docker push docker.pkg.github.com/$GITHUB_REPOSITORY/${{ env.DOCKER_IMAGE_NAME }} || true
 
       - name: Hello world action step
-        uses: ./docker/alpline/Dockerfile # Uses an action in the root directory
+        uses: ./docker/alpline/
         id: hello
         with:
           gentamura: 'Mona the Octocat'

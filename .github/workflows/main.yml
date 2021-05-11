@@ -10,12 +10,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Use GitHub Packages for Docker
-        run: |
-          echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin
-          docker pull docker.pkg.github.com/$GITHUB_REPOSITORY/alpine || true
-          docker build . -t alpine --cache-from=docker.pkg.github.com/$GITHUB_REPOSITORY/alpine
-          docker tag alpine docker.pkg.github.com/$GITHUB_REPOSITORY/alpine && docker push docker.pkg.github.com/$GITHUB_REPOSITORY/alpine || true
+      # - name: Use GitHub Packages for Docker
+      #   run: |
+      #     echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin
+      #     docker pull docker.pkg.github.com/$GITHUB_REPOSITORY/alpine || true
+      #     docker build . -t alpine --cache-from=docker.pkg.github.com/$GITHUB_REPOSITORY/alpine
+      #     docker tag alpine docker.pkg.github.com/$GITHUB_REPOSITORY/alpine && docker push docker.pkg.github.com/$GITHUB_REPOSITORY/alpine || true
+
+      - name: Push to GitHub Packages
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: docker.pkg.github.com
+          repository: $GITHUB_REPOSITORY/alpine
+          tag_with_ref: true
 
       - name: Hello world action step
         uses: ./ # Uses an action in the root directory
